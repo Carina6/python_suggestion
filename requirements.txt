@@ -1,0 +1,14 @@
+pytest==3.0.6
+requests==2.18.1
+SQLAlchemy==1.1.6
+PyMySQL==0.7.10
+oscrypto==0.18.0
+PyYAML==3.11
+thrift==0.10.0
+jsonpickle==0.9.4
+openpyxl==2.4.8
+moment==0.8.2
+sqlacodegen==1.1.6
+gitrepo==0.2.2
+pytime==0.2.0
+bs4==0.0.1

@@ -9,7 +9,10 @@ from copy import deepcopy
 from queue import Queue
 from time import sleep, ctime
 import os
+
+from test import broker
 from test.MySingleton import my_singleton
+from test.utils.state import stateful, State, behavior, switch
 
 
 # 23: 使用 else 子句简化循环（异常处理）
@@ -266,3 +269,90 @@ def test_singleton():
     s1 = my_singleton   # module 在程序中只被加载一次，本身是单例的
     s2 = my_singleton
     print(id(s1) == id(s2))  # 如果在不同的module中，s1和s2的id不相等
+
+
+# 51：用 mixin 模式让程序更加灵活
+# 详细讲解： https://kevinguo.me/2018/01/19/python-topological-sorting/
+def test_mixin():
+    print()
+
+    class A(object):
+        def foo(self):
+            print('a foo')
+        def bar(self):
+            print('a bar')
+
+    class B(object):
+        def foo(self):
+            print('b foo')
+        def bar(self):
+            print('b bar')
+
+    class C1(A):
+        pass
+
+    class C2(B):
+        def bar(self):
+            print('c2 bar')
+
+    class D(C1, C2):             # 多重继承
+        pass
+
+    print(D.__mro__)             # 类D的继承顺序：D->C1->A->C2->B->object
+    d = D()
+    d.foo()                      # 按继承顺序查找foo()方法，找到即输出
+    d.bar()                      # 同上
+    # print(inspect.isclass(D))
+    # print(inspect.getmembers(B))
+    # print(B.__dict__.values())
+
+
+# 52：用发布订阅模式实现松耦合
+'''
+发布者将消息分为不同类别直接发布，订阅者订阅并接受感兴趣的消息。一个中间代理人broker维护发布者和订阅者的关系
+'''
+def test_subscribe_mode():
+    def greeting(name, n):
+        print('hello,{}'.format(name))
+    def bye(name, n):
+        print('hello,{}'.format(n))
+    broker.subscribe('greet', greeting)     # 参数为 主题 和 函数名
+    broker.subscribe('greet', bye)
+    broker.publish('greet', name='carinaliu', n='liu')    # 参数为 主题 和 函数参数
+
+
+# 53：用状态模式美化代码
+def test_state_mode():
+
+    @stateful
+    class User(object):
+        # 退出状态类，定义退出状态时可进行的操作
+        class signout(State):
+            default = True       # 通过default 属性定义默认状态
+
+            @behavior
+            def signin(self, user, pwd):
+                print('signin with user and pwd')
+                switch(self, User.signin)
+
+        # 登录状态类，定义登录状态时可进行的操作
+        class signin(State):
+            @behavior
+            def move(self, dst):
+                print(dst)
+
+            @behavior
+            def atk(self, other):
+                print(other)
+
+            @behavior
+            def signout(self):
+                print('signout!!')
+                switch(self, User.signout)
+
+    user = User()
+    # user.move('move0')            # 默认状态为signout, 此时不能进行signin类中的操作（报错）
+    user.signin('user', 'pwd')      # 调用此方法将状态转换为signin
+    user.move('move1')              # 此时状态为signin， 可调用该类下的方法
+    user.signout()                  # 状态转为signout
+    # user.move('move2')            # 不能进行signin类中的操作（报错）
