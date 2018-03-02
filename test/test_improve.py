@@ -385,6 +385,8 @@ def test_init():
 1. 拦截类的创建
 2. 修改类
 3. 返回修改之后的类
+
+更具体的应用参见 OrmWithMetaclass.py
 '''
 def test_metaclass():
     def echo_bar(self):
@@ -422,3 +424,4 @@ def test_metaclass():
     print(hasattr(Foo, 'BAR'))
     f = Foo()
     print(f.BAR)
+
