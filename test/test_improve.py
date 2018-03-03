@@ -11,7 +11,7 @@ from time import sleep, ctime
 import os
 
 from test import broker
-from test.MySingleton import my_singleton
+from test.my_singleton import my_singleton
 from test.utils.state import stateful, State, behavior, switch
 
 
