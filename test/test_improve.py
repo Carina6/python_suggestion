@@ -444,6 +444,7 @@ def test_protocol():
             print('calling __add__')
 
     class B(object):
+        # __add__ 的反运算方法；所有数值运算符和位运算符都支持反运算，规则一律在前面加上r即可
         def __radd__(self, other):
             print('calling __radd__')
 
@@ -451,11 +452,17 @@ def test_protocol():
         def __call__(self, *args, **kwargs):
             print('calling __call__:{}'.format(args[0]))
 
-    # 定义一个容器类，所需的协议
+        # 可哈希对象，用以支持hash()的内置函数；
+        # 只有支持可哈希协议的类型才能作为dict的键类型，只要继承自object的新式类默认就支持
+        def __hash__(self):
+            print('calling __hash__')
+
+    # 定义一个容器类，所需的协议；其实object类已经定义了这些协议，只要继承object的类
     class C(object):
         # 用来支持len()函数
         def __len__(self):
             print('calling __len__')
+            return 1
 
         # 读
         def __getitem__(self, item):
@@ -489,5 +496,13 @@ def test_protocol():
     print('{}'.format(a))
 
     a + b                         # 反运算  调用A的__add__操作，如果没有，则调用B的__radd__操作
-    b(222)                        # 类B 定义了__call__,
+    b(222)                        # 类B 定义了可调用协议__call__
+
+    c = C()                       # 容器类，
+    # print(len(a))               # 报错，object of type 'A' has no len()
+    c['test'] = a
+    print(len(c))
+
+
+
 
