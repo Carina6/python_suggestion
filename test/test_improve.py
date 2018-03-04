@@ -446,6 +446,12 @@ def test_discribe_protocol():
     A.class_attr2 = 3
 
 
+# 60：区别__getattr__()和__getattribute__()
+# todo
+def test_getattr():
+    pass
+
+
 # 63：熟悉 Python 对象协议
 def test_protocol():
     class A(object):
