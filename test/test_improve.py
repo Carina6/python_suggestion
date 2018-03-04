@@ -426,6 +426,26 @@ def test_metaclass():
     print(f.BAR)
 
 
+# 59: 理解描述符机制
+def test_discribe_protocol():
+    class A(object):
+        class_attr = 1
+
+    # 每个类都有一个__dict__属性，包含类的所有属性，又称类属性
+    print(A.__dict__)
+    a = A()
+
+    # 实例的属性，称实例属性
+    print(a.__dict__)
+    # 当我们通过实例访问某一个属性时，它会首先尝试在实例属性中查找，如果找不到，则会到类属性中查找
+    print(a.class_attr)
+
+    # 通过实例增加属性，只能是实例属性
+    a.class_attr1 = 2
+    # 通过类增加的属性，是类属性；但是内置类型不能随意增加属性或方法
+    A.class_attr2 = 3
+
+
 # 63：熟悉 Python 对象协议
 def test_protocol():
     class A(object):
