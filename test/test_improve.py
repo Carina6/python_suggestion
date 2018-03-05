@@ -6,6 +6,7 @@ import urllib
 from collections import Counter
 from configparser import ConfigParser
 from copy import deepcopy
+from ftplib import FTP
 from queue import Queue
 from time import sleep, ctime
 import os
@@ -427,9 +428,14 @@ def test_metaclass():
 
 
 # 59: 理解描述符机制
+''' 实现了描述符协议__get__, __set__, __delete__ 的对象 称为描述符 '''
 def test_discribe_protocol():
     class A(object):
         class_attr = 1
+
+        # 每个函数都有__get__方法，也就是说每个函数都是描述符
+        def my_method(self):
+            print('my_method')
 
     # 每个类都有一个__dict__属性，包含类的所有属性，又称类属性
     print(A.__dict__)
@@ -445,14 +451,40 @@ def test_discribe_protocol():
     # 通过类增加的属性，是类属性；但是内置类型不能随意增加属性或方法
     A.class_attr2 = 3
 
+    print(A.__dict__['my_method'])
+
+    print(A.my_method)
+
 
 # 60：区别__getattr__()和__getattribute__()
-# todo
+''' __getattribute__() 总会被调用，定义了__getattr__() 当AttributeError异常发生时会被调用
+注意：
+1.覆盖了__getattribute__()方法后，任何属性的访问都会调用用户定义的__getattribute__,性能上会有所损耗，比使用默认的方法要慢
+2.覆盖的__getattr__()如果能动态处理事先未定义的属性，可以更好的实现数据隐藏，因为dir()通常只显示正常的属性和方法
+'''
 def test_getattr():
-    pass
+    class A(object):
+
+        def __init__(self, name):
+            self.name = name
+
+        def __getattr__(self, name):
+            print('calling __getattr__:', name)
+
+        def __getattribute__(self, name):
+            try:
+                return super(A, self).__getattribute__(name)
+            except KeyError:
+                return 'default'
+
+    a = A('attribute')
+    print(a.name)
+    # 未定义__getattr__时，调用__getattribute__()方法报错：AttributeError: 'A' object has no attribute 'test'
+    # 定义__getattr__，报错AttributeError时，会调用__getattr__
+    print(a.test)
 
 
-# 63：熟悉 Python 对象协议
+# 63：熟悉 Python 对象协议1
 def test_protocol():
     class A(object):
         # 字符串格式化中，如果有占位符 %s，那么按照字符串转换的协议，Python 会自动地调用相应对象的 __str__() 方法
@@ -514,7 +546,6 @@ def test_protocol():
         def __contains__(self, item):
             print('calling __contains__')
 
-
     a = A()
     b = B()
     # 调用__str__
@@ -530,5 +561,32 @@ def test_protocol():
     print(len(c))
 
 
+# 63：熟悉 Python 对象协议2
+def test_closer():
+    # 上下文管理协议，也就是对with语句的支持，通过__enter__和__exit__两个方法实现对资源的清理
+    '''
+    通过with语句和一个close方法来关闭一个对象
+    与这里Closer类似的类在标准库已经存在，就是contextlib里的closing
+    '''
 
+    class Closer(object):
+        def __init__(self, obj):
+            self.obj = obj
 
+        def __enter__(self):
+            return self.obj
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            try:
+                self.obj.close()
+            except AttributeError:
+                print('Not closable.')
+                return True
+
+    ftp = FTP('ftp.byfly.by')
+    ftp.login()
+    with Closer(ftp) as conn:
+        co = conn
+        conn.dir()
+
+    # co.dir()                   # 报错，因为此时FTP连接会话已经关闭
