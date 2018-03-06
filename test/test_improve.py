@@ -9,6 +9,7 @@ from collections import Counter
 from configparser import ConfigParser
 from copy import deepcopy
 from ftplib import FTP
+from itertools import product, permutations, combinations, combinations_with_replacement
 from queue import Queue
 from re import findall, split
 from time import sleep, ctime
@@ -640,3 +641,61 @@ def test_pipe():
               | select(lambda x: (x[0], (x[1] | count)))
               | sort(key=lambda x: x[1], reverse=True)
               )
+
+# 65：熟悉 Python 的迭代器协议1
+'''
+1.实现__iter__()方法，返回一个迭代器
+2.实现next()方法，返回当前的元素，并指向下一个元素的位置，如果当前位置已无元素，则抛出StopIteration异常
+3.迭代器具有惰性求值的特性，可以在迭代至当前元素时才计算（或读取）该元素的值，非常适合遍历无穷个元素的集合
+'''
+def test_iter():
+    class Fib(object):
+        def __init__(self):
+            self._a = 0
+            self._b = 1
+
+        def __iter__(self):
+            return self
+
+        def __next__(self):
+            self._a, self._b = self._b, self._a+self._b
+            return self._a
+
+    # 对于一个可迭代的（iterable）/可遍历的对象，enumerate将其组成一个索引序列，利用它可以同时获得索引和值
+    for i, f in enumerate(Fib()):
+        if i > 10:
+            break
+        print(f)
+
+
+# 65：熟悉 Python 的迭代器协议2
+'''itertools模块提供的全部是处理迭代功能的函数，它们的返回值不是list，而是Iterator，只有用for循环迭代的时候才真正计算'''
+def test_itertools():
+    # count(1)会创建一个无限序列，类似的还有cycle(),repeat()
+    natuals = itertools.count(1)
+
+    # takewhile()用来根据条件判断来截取出一个有限的序列
+    ns = itertools.takewhile(lambda x: x <= 10, natuals)
+    print(list(ns))
+
+    # chain() 可以把一组迭代对象串联起来，形成一个更大的迭代器
+    for c in itertools.chain([1, 2, 3], ['a', 'b', 'c']):
+        print(c)
+
+    # groupby() 把迭代器中相邻的重复元素挑出来放在一起,
+    ''' 如果希望效果达到和sql中的一样，需要先将list排序一下， Pipe中的groupby实现了此功能'''
+    for key, group in itertools.groupby('AAABBBCCAAA'):
+        print(key, list(group))
+
+    # 组合函数
+    # 计算m个序列的n次笛卡尔积
+    print(list(product('ABCD', repeat=2)))
+
+    # 产生全排列
+    print(list(permutations('ABCD', 2)))
+
+    # 产生无重复元素的组合
+    print(list(combinations('ABCD', 2)))
+
+    # 产生有重复元素的组合
+    print(list(combinations_with_replacement('ABCD', 2)))
