@@ -15,6 +15,7 @@ from queue import Queue
 from re import findall, split
 from time import sleep, ctime
 
+import gc
 from pipe import add, take_while, where, Pipe, groupby, select, sort, count
 
 from test import broker
@@ -732,3 +733,21 @@ def test_itertools2():
 
     # 产生有重复元素的组合
     print(list(combinations_with_replacement('ABCD', 2)))
+
+
+# 建议 68：理解 GIL 的局限性
+'''
+GIL被称为全局解释器锁，是Python虚拟机上用作互斥线程的一种机制，
+他的作用是保证任何情况下虚拟机中只会有一个线程被运行，而其他线程都处于等待GIL锁被释放的状态
+'''
+
+
+# 建议 69：对象的管理与垃圾回收
+def test_gc():
+    print()
+    # gc的自动回收功能
+    print(gc.isenabled())
+    # 查看默认阈值
+    print(gc.get_threshold())
+    # gc.garbage 返回的是由于循环引用而产生的不可达的垃圾对象的列表
+    print(gc.garbage)
