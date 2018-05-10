@@ -4,6 +4,8 @@
 '''
 用model实现单例模式
 '''
+
+
 class MySingleton(object):
     def rise(self):
         print('sun rise...')

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import copy
+import gc
 import itertools
 import os
 import threading
@@ -12,15 +13,14 @@ from ftplib import FTP
 from itertools import product, permutations, combinations, combinations_with_replacement, islice, starmap, tee, \
     zip_longest
 from queue import Queue
-from re import findall, split
+from re import findall
 from time import sleep, ctime
 
-import gc
 from pipe import add, take_while, where, Pipe, groupby, select, sort, count
 
-from test import broker
-from test.my_singleton import my_singleton
-from test.utils.state import stateful, State, behavior, switch
+import broker
+import my_singleton
+from utils import stateful, State, behavior, switch
 
 
 # 23: 使用 else 子句简化循环（异常处理）
