@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from .broker import subscribe, publish
 
 
 # 52：用发布订阅模式实现松耦合
@@ -15,6 +16,6 @@ def test_subscribe_mode():
     def bye(name, n):
         print('hello,{}'.format(n))
 
-    broker.subscribe('greet', greeting)  # 参数为 主题 和 函数名
-    broker.subscribe('greet', bye)
-    broker.publish('greet', name='carinaliu', n='liu')  # 参数为 主题 和 函数参数
+    subscribe('greet', greeting)  # 参数为 主题 和 函数名
+    subscribe('greet', bye)
+    publish('greet', name='carinaliu', n='liu')  # 参数为 主题 和 函数参数
