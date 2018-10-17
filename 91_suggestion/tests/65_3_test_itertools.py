@@ -13,7 +13,7 @@ def test_itertools2():
 
     print('1===============')
     # 产生全排列
-    print(list(permutations('ABCD', 2)))
+    print(list(permutations('ABCD', 4)))
 
     print('2===============')
     # 产生无重复元素的组合
