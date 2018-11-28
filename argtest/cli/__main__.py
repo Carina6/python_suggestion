@@ -3,6 +3,24 @@
 # @Time    : 2018/11/27 10:35 PM
 # @Author  : hlliu
 import argparse
+'''
+ArgumentParser.add_argument(name or flags...[, action][, nargs][, const][, default][, type][, choices][, required][, help][, metavar][, dest])
+    -name or flags:
+    -action:
+    -nargs:参数的数量，有如下几个设定：
+        -N：N个参数
+        -?:首先从命令行中获取，若没有则从const中获取，仍然没有则从default中获取
+        -*/+:任意多个参数
+    -const:保存为一个常量
+    -default:
+    -type:
+    -choices:
+    -required:
+    -help:
+    -metavar:帮助信息中显示的参数名称
+    -dest:参数别名
+    
+'''
 
 
 def main():
