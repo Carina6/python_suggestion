@@ -64,5 +64,27 @@ def main():
     args = parser.parse_args()
 
 
+def runner_parser(ap=None):
+    if not ap:
+        ap = argparse.ArgumentParser()
+    ap.add_argument("script", help="air path")
+    ap.add_argument("--device", help="connect dev by uri string, e.g. Android:///", nargs="?", action="append")
+    ap.add_argument("--log", help="set log dir, default to be script dir", nargs="?", const=True)
+    ap.add_argument("--recording", help="record screen when running", nargs="?", const=True)
+    return ap
+
+
+def get_parger(ap):
+    ap.add_argument("script", help="script filepath")
+    ap.add_argument("--outfile", help="output html filepath, default to be log.html", default=HTML_FILE)
+    ap.add_argument("--static_root", help="static files root dir")
+    ap.add_argument("--log_root", help="log & screen data root dir, logfile should be log_root/log.txt")
+    ap.add_argument("--record", help="custom screen record file path", nargs="+")
+    ap.add_argument("--export", help="export a portable report dir containing all resources")
+    ap.add_argument("--lang", help="report language", default="en")
+    ap.add_argument("--plugins", help="load reporter plugins", nargs="+")
+    return ap
+
+
 if __name__ == '__main__':
     main()
