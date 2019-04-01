@@ -10,6 +10,7 @@ def test_sort():
     # sorted 根据指定key排序，此例根据name正序，age倒序排列，不会改变person列表的原始值
     persons_sorted = sorted(persons, key=lambda x: (x['name'], -x['age']))
     print(persons_sorted)
+    print(persons)
 
     # sort 根据指定key排序，会改变person列表的原始值
     persons.sort(key=lambda x: (x['name'], -x['age']))

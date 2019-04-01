@@ -24,15 +24,15 @@ def test_metaclass():
 
     # 使用class关键字时，Python幕后的做的事情是 通过type创建类
     # type(类名, 父类的元组（针对继承的情况，可以为空），包含 属性/函数 的字典（名称和值）)
-    a = type('myclass', (), {'bar': True, 'echo_bar': echo_bar})
-    print(a)  # 类
-    print(a())  # 类实例
-    print(a.bar)  # 类调用属性
-    b = a()  # 创建实例对象
-    print(b.bar)  # 用实例对象调用属性 bar
-    b.echo_bar()  # 用实例对象调用函数 echo_bar
-    print(b.__class__)  # __class__ 用来查看对象b 的类型
-    print(b.__class__.__class__)  # type
+    # a = type('myclass', (), {'bar': True, 'echo_bar': echo_bar})
+    # print(a)  # 类
+    # print(a())  # 类实例
+    # print(a.bar)  # 类调用属性
+    # b = a()  # 创建实例对象
+    # print(b.bar)  # 用实例对象调用属性 bar
+    # b.echo_bar()  # 用实例对象调用函数 echo_bar
+    # print(b.__class__)  # __class__ 用来查看对象b 的类型
+    # print(b.__class__.__class__)  # type
 
     def upper_attr(class_name, class_parent, class_attr):
         attrs = ((name, value) for name, value in class_attr.items() if not name.startswith('__'))
