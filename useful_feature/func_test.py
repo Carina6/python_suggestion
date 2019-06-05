@@ -41,6 +41,3 @@ print(reduce(fn, map(char2num, '1234')))
 filter
 '''
 print(list(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15])))
-
-print(str(requests.get(url='https://www.ershicimi.com/').content.decode('utf-8')).count('python'))
-
