@@ -5,7 +5,7 @@
 import sys
 import re
 
-sys.setdefaultencoding('utf-8')
+# sys.setdefaultencoding('utf-8')
 
 
 '''

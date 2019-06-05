@@ -3,10 +3,11 @@
 # @Date  : 2019/4/1 17:48
 # @Author: hlliu
 from functools import reduce
-# map() & reduce()
+import requests
 
-# map(func, iterables)
-print(list(map(str, [1, 2, 3, 4, 5, 6])))
+'''
+map() & reduce() & filter()
+'''
 
 
 def add(x, y):
@@ -22,14 +23,24 @@ def fn(x, y):
     return x*10+y
 
 
-# reduce(func, iterables) =>1234
-print(reduce(fn, map(char2num, '1234')))
-
-
 def is_odd(n):
     return n % 2 == 1
 
 
-# filter
+'''
+map(func, iterables)
+'''
+print(list(map(str, [1, 2, 3, 4, 5, 6])))
+
+'''
+reduce(func, iterables) =>1234
+'''
+print(reduce(fn, map(char2num, '1234')))
+
+'''
+filter
+'''
 print(list(filter(is_odd, [1, 2, 4, 5, 6, 9, 10, 15])))
+
+print(str(requests.get(url='https://www.ershicimi.com/').content.decode('utf-8')).count('python'))
 
