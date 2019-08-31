@@ -1,4 +1,4 @@
-pytest==3.0.6
+pytest
 requests==2.18.1
 SQLAlchemy==1.1.6
 PyMySQL==0.7.10
@@ -13,3 +13,12 @@ gitrepo==0.2.2
 pytime==0.2.0
 bs4==0.0.1
 pipe
+
+# plugin
+pytest-sugar
+pytest-assume
+pytest-ordering
+pytest-selenium
+pytest-play
+pytest-rerunfailures
+pytest-allure-adaptor
