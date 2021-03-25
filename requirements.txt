@@ -3,7 +3,7 @@ requests==2.18.1
 SQLAlchemy==1.1.6
 PyMySQL==0.7.10
 oscrypto==0.18.0
-PyYAML==3.11
+PyYAML==5.4
 thrift==0.10.0
 jsonpickle==0.9.4
 openpyxl==2.4.8
